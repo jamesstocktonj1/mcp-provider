@@ -29,12 +29,49 @@ func NewServer() (*server, error) {
 		Name:        "greet",
 		Description: "say hi",
 	}, func(ctx context.Context, req *mcp.CallToolRequest, args args) (*mcp.CallToolResult, any, error) {
-		fmt.Printf("Greeting Someone - %s\n", args.Name)
+		fmt.Printf("Greeting Someone - %+v\n", req)
 		return &mcp.CallToolResult{
 			Content: []mcp.Content{
-				&mcp.TextContent{Text: "Hi " + args.Name},
+				&mcp.TextContent{Text: fmt.Sprintf("Hi %+v", args)},
 			},
 		}, nil, nil
+	})
+
+	s.mcpServer.AddPrompt(&mcp.Prompt{
+		Name: "greetings",
+		Arguments: []*mcp.PromptArgument{
+			{
+				Name:        "name",
+				Description: "name input",
+				Required:    true,
+			},
+		},
+	}, func(ctx context.Context, req *mcp.GetPromptRequest) (*mcp.GetPromptResult, error) {
+		fmt.Printf("Prompt Someone - %+v\n", req.GetParams())
+		return &mcp.GetPromptResult{
+			Description: "this is some greeting",
+			Messages: []*mcp.PromptMessage{
+				{
+					Content: &mcp.TextContent{Text: "Hello Some Prompt"},
+					Role:    mcp.Role("user"),
+				},
+			},
+		}, nil
+	})
+
+	s.mcpServer.AddResource(&mcp.Resource{
+		URI:      "file:///project/messages.txt",
+		MIMEType: "text/plain",
+	}, func(ctx context.Context, req *mcp.ReadResourceRequest) (*mcp.ReadResourceResult, error) {
+		fmt.Printf("Read Messages - %+v\n", req.GetParams())
+		return &mcp.ReadResourceResult{
+			Contents: []*mcp.ResourceContents{
+				{
+					URI:  "file:///project/messages.txt",
+					Text: "Hello Messages",
+				},
+			},
+		}, nil
 	})
 
 	s.httpServer = &http.Server{
