@@ -1,0 +1,9 @@
+name = "mcp-prompt-handler"
+language = "tinygo"
+type = "component"
+version = "0.1.0"
+
+[component]
+wit_world = "component"
+wasm_target = "wasm32-wasip2"
+destination = "build/mcp-prompt-handler_s.wasm"
