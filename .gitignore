@@ -36,3 +36,4 @@ bindings/
 **/wit/deps/
 **/gen/
 **/build/
+wasmcloud-mcp-provider
