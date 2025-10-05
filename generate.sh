@@ -1,0 +1,1 @@
+cat testdata/wasmcloud-provider.json | base64 > testdata/wasmcloud-provider.bin
