@@ -1,0 +1,8 @@
+name = "MCP"
+language = "go"
+type = "provider"
+version = "0.1.0"
+
+[provider]
+vendor = "jamesstocktonj1"
+bin_name = "wasmcloud-mcp-provider"
