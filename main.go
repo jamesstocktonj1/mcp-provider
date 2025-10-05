@@ -6,7 +6,7 @@ import (
 	"github.com/jamesstocktonj1/mcp-provider/app"
 )
 
-//go:generate wit-bindgen-wrpc go --out-dir bindings --world imports --package github.com/jamesstocktonj1/ticker-provider/bindings wit
+//go:generate wit-bindgen-wrpc go --out-dir bindings --world imports --package github.com/jamesstocktonj1/mcp-provider/bindings wit
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
