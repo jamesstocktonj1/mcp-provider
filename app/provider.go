@@ -2,19 +2,38 @@ package app
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.wasmcloud.dev/provider"
 )
 
 func (s *server) handlePutTargetLink(link provider.InterfaceLinkDefinition) error {
-	s.provider.Logger.Info("Handling Put Link", "link", link)
-	return nil
+	if len(link.Interfaces) > 1 {
+		s.provider.Logger.Warn("multiple link interfaces defined, using first", "link", link)
+	}
+
+	switch link.Interfaces[0] {
+	case TypePrompt:
+		return s.promptHandler.handlePutTargetLink(link)
+	default:
+		s.provider.Logger.Error("unknown interface type - "+link.Interfaces[0], "link", link)
+		return fmt.Errorf("unknown interface type - %s", link.Interfaces[0])
+	}
 }
 
 func (s *server) handleDelTargetLink(link provider.InterfaceLinkDefinition) error {
-	s.provider.Logger.Info("Handling Delete Link", "link", link)
-	return nil
+	if len(link.Interfaces) > 1 {
+		s.provider.Logger.Warn("multiple link interfaces defined, using first", "link", link)
+	}
+
+	switch link.Interfaces[0] {
+	case TypePrompt:
+		return s.promptHandler.handleDelTargetLink(link)
+	default:
+		s.provider.Logger.Error("unknown interface type - "+link.Interfaces[0], "link", link)
+		return fmt.Errorf("unknown interface type - %s", link.Interfaces[0])
+	}
 }
 
 func (s *server) handleHealth() string {

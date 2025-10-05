@@ -23,6 +23,9 @@ type server struct {
 
 	errorChan  chan error
 	signalChan chan os.Signal
+
+	// wRPC handlers
+	promptHandler PromptHandler
 }
 
 type args struct {
@@ -50,6 +53,12 @@ func NewServer() (*server, error) {
 	}, nil)
 	s.mcpServer.AddReceivingMiddleware(s.loggingMiddleware)
 	s.mcpServer.AddSendingMiddleware(s.loggingMiddleware)
+
+	// Create new wRPC handlers
+	s.promptHandler, err = NewPromptHandler()
+	if err != nil {
+		return nil, err
+	}
 
 	mcp.AddTool(s.mcpServer, &mcp.Tool{
 		Name:        "greet",
@@ -135,7 +144,7 @@ func (s *server) Run() error {
 	// Shutdown after return
 	defer func() {
 		if err := s.Stop(); err != nil {
-			log.Printf("unable to stop server - %w", err)
+			log.Printf("unable to stop server - %s", err.Error())
 		}
 	}()
 
