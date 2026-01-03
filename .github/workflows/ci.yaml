@@ -1,0 +1,37 @@
+name: PR Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Test Workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Wrpc
+        uses: taiki-e/cache-cargo-install-action@v3
+        with:
+          tool: wrpc
+      - name: Install WasmTools
+        uses: taiki-e/cache-cargo-install-action@v3
+        with:
+          tool: wasm-tools
+      - name: Install wash
+        uses: taiki-e/cache-cargo-install-action@v3
+        with:
+          tool: wash
+      - name: Run Build
+        run: |
+          wash build
+      - name: Run tests
+        run: go test ./... -coverprofile=coverage.out
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage.out
