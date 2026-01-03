@@ -4,7 +4,10 @@ go 1.24.1
 
 tool go.bytecodealliance.org/cmd/wit-bindgen-go
 
-require go.bytecodealliance.org/cm v0.3.0
+require (
+	go.bytecodealliance.org/cm v0.3.0
+	go.wasmcloud.dev/component v0.0.9
+)
 
 require (
 	github.com/coreos/go-semver v0.3.1 // indirect
@@ -12,6 +15,8 @@ require (
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/regclient/regclient v0.8.3 // indirect
+	github.com/samber/lo v1.50.0 // indirect
+	github.com/samber/slog-common v0.18.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/tetratelabs/wazero v1.9.0 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
@@ -19,4 +24,5 @@ require (
 	go.bytecodealliance.org v0.7.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 )
