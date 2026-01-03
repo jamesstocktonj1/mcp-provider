@@ -1,0 +1,7 @@
+package jamesstocktonj1:mcp-example-prompt-handler;
+
+world component {
+  include wasmcloud:component-go/imports@0.1.0;
+  
+  export jamesstocktonj1:mcp/mcp-prompt@0.1.0;
+}

@@ -1,5 +1,3 @@
-package jamesstocktonj1:mcp@0.1.0;
-
-world imports {
-  import tool;
+world provider {
+  import mcp-prompt;
 }

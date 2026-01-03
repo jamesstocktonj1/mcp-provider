@@ -1,0 +1,38 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: mcp-provider
+  annotations:
+    description: 'A demo for the mcp provider'
+    wasmcloud.dev/authors: James Stockton
+    wasmcloud.dev/source-url: https://github.com/jamesstocktonj1/mcp-provider/blob/main/example/wadm.yaml
+    wasmcloud.dev/readme-md-url: https://github.com/jamesstocktonj1/mcp-provider/blob/main/README.md
+    wasmcloud.dev/homepage: https://github.com/jamesstocktonj1/mcp-provider
+spec:
+  components:
+    - name: mcp
+      type: capability
+      properties:
+        image: file://../build/wasmcloud-mcp-provider.par.gz
+
+    - name: prompt-handler
+      type: component
+      properties:
+        image: file://./prompt-handler/build/mcp-prompt-handler_s.wasm
+      traits:
+        - type: spreadscaler
+          properties:
+            instances: 10
+        - type: link
+          properties:
+            target: mcp
+            namespace: jamesstocktonj1
+            package: mcp
+            interfaces: [mcp-prompt]
+            target_config:
+              - name: prompt-config
+                properties:
+                  name: "greetings"
+                  title: "Greetings"
+                  description: "Greet someone using this prompt"
+                  arguments: "[{\"name\": \"name\", \"description\": \"name input\", \"required\": true}]"

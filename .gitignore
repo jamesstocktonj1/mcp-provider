@@ -34,3 +34,6 @@ go.work.sum
 # WASM Files
 bindings/
 **/wit/deps/
+**/gen/
+**/build/
+wasmcloud-mcp-provider

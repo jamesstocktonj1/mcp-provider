@@ -1,3 +1,55 @@
-interface tool {
+package jamesstocktonj1:mcp@0.1.0;
+
+interface mcp-tool {
   greeting: func() -> string;
+}
+
+interface mcp-prompt {
+  use types.{content, error, role, session};
+
+  record prompt-request {
+    session: session,
+    params: params
+  }
+
+  record params {
+    name: string,
+    arguments: list<tuple<string, string>>
+  }
+
+  record prompt-response {
+    description: string,
+    messages: list<prompt-message>
+  }
+
+  record prompt-message {
+    content: content,
+    role: role
+  }
+
+  handle: func(request: prompt-request) -> result<prompt-response, error>;
+}
+
+interface mcp-resource {
+
+}
+
+interface types {
+  type error = string;
+
+  record session {
+    id: string
+  }
+
+  enum role {
+    user
+  }
+
+  variant content {
+    text(text-content)
+  }
+
+  record text-content {
+    text: string
+  }
 }
