@@ -1,0 +1,36 @@
+name: Build MCP Provider
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: Build Provider
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Deps
+        uses: taiki-e/cache-cargo-install-action@v2
+        with:
+          tool: wrpc,wasm-tools,wash
+      - name: Build Provider
+        run: |
+          wash build
+      - name: Publish Provider
+        env:
+          WASH_REG_USER: ${{ github.actor }}
+          WASH_REG_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: wash push ghcr.io/${{ github.repository }}:${{ inputs.version || github.head_ref || github.ref_name }} build/wasmcloud-mcp-provider.par.gz
