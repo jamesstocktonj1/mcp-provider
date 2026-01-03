@@ -13,10 +13,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Deps
+      - name: Install Wrpc
         uses: taiki-e/cache-cargo-install-action@v3
         with:
-          tool: wrpc,wasm-tools,wash
+          tool: wrpc
+      - name: Install WasmTools
+        uses: taiki-e/cache-cargo-install-action@v3
+        with:
+          tool: wasm-tools
+      - name: Install wash
+        uses: taiki-e/cache-cargo-install-action@v3
+        with:
+          tool: wash
       - name: Run Build
         run: |
           wash build
