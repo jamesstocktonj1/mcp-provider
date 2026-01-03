@@ -55,7 +55,7 @@ func NewServer() (*server, error) {
 	s.mcpServer.AddSendingMiddleware(s.loggingMiddleware)
 
 	// Create new wRPC handlers
-	s.promptHandler, err = NewPromptHandler()
+	s.promptHandler, err = NewPromptHandler(prov, s.mcpServer, prov.Logger)
 	if err != nil {
 		return nil, err
 	}
@@ -70,28 +70,6 @@ func NewServer() (*server, error) {
 				&mcp.TextContent{Text: fmt.Sprintf("Hi %+v", args)},
 			},
 		}, nil, nil
-	})
-
-	s.mcpServer.AddPrompt(&mcp.Prompt{
-		Name: "greetings",
-		Arguments: []*mcp.PromptArgument{
-			{
-				Name:        "name",
-				Description: "name input",
-				Required:    true,
-			},
-		},
-	}, func(ctx context.Context, req *mcp.GetPromptRequest) (*mcp.GetPromptResult, error) {
-		s.provider.Logger.Info("Prompt Someone", "params", req.GetParams())
-		return &mcp.GetPromptResult{
-			Description: "this is some greeting",
-			Messages: []*mcp.PromptMessage{
-				{
-					Content: &mcp.TextContent{Text: "Hello Some Prompt"},
-					Role:    mcp.Role("user"),
-				},
-			},
-		}, nil
 	})
 
 	s.mcpServer.AddResource(&mcp.Resource{
@@ -113,6 +91,7 @@ func NewServer() (*server, error) {
 	s.httpServer = &http.Server{
 		Addr: ":8080",
 		Handler: mcp.NewStreamableHTTPHandler(func(r *http.Request) *mcp.Server {
+			s.provider.Logger.Info("New Request", "host", r.URL.Host, "path", r.URL.Path)
 			return s.mcpServer
 		}, nil),
 		ReadTimeout:  15 * time.Second,
