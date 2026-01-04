@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jamesstocktonj1/mcp-provider/app/prompt"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.wasmcloud.dev/provider"
 )
@@ -14,8 +15,8 @@ func (s *server) handlePutTargetLink(link provider.InterfaceLinkDefinition) erro
 	}
 
 	switch link.Interfaces[0] {
-	case TypePrompt:
-		return s.promptHandler.handlePutTargetLink(link)
+	case prompt.TypePrompt:
+		return s.promptHandler.HandlePutTargetLink(link)
 	default:
 		s.provider.Logger.Error("unknown interface type - "+link.Interfaces[0], "link", link)
 		return fmt.Errorf("unknown interface type - %s", link.Interfaces[0])
@@ -28,8 +29,8 @@ func (s *server) handleDelTargetLink(link provider.InterfaceLinkDefinition) erro
 	}
 
 	switch link.Interfaces[0] {
-	case TypePrompt:
-		return s.promptHandler.handleDelTargetLink(link)
+	case prompt.TypePrompt:
+		return s.promptHandler.HandleDelTargetLink(link)
 	default:
 		s.provider.Logger.Error("unknown interface type - "+link.Interfaces[0], "link", link)
 		return fmt.Errorf("unknown interface type - %s", link.Interfaces[0])

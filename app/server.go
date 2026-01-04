@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/jamesstocktonj1/mcp-provider/app/prompt"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.wasmcloud.dev/provider"
 )
@@ -25,7 +26,7 @@ type server struct {
 	signalChan chan os.Signal
 
 	// wRPC handlers
-	promptHandler PromptHandler
+	promptHandler prompt.PromptHandler
 }
 
 type args struct {
@@ -55,7 +56,7 @@ func NewServer() (*server, error) {
 	s.mcpServer.AddSendingMiddleware(s.loggingMiddleware)
 
 	// Create new wRPC handlers
-	s.promptHandler, err = NewPromptHandler(prov, s.mcpServer, prov.Logger)
+	s.promptHandler, err = prompt.NewPromptHandler(prov, s.mcpServer, prov.Logger)
 	if err != nil {
 		return nil, err
 	}
