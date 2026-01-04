@@ -1,4 +1,4 @@
-package app
+package prompt
 
 import (
 	"context"
@@ -16,8 +16,8 @@ import (
 const TypePrompt = "mcp-prompt"
 
 type PromptHandler interface {
-	handlePutTargetLink(link provider.InterfaceLinkDefinition) error
-	handleDelTargetLink(link provider.InterfaceLinkDefinition) error
+	HandlePutTargetLink(link provider.InterfaceLinkDefinition) error
+	HandleDelTargetLink(link provider.InterfaceLinkDefinition) error
 }
 
 type PromptLinker interface {
@@ -50,7 +50,7 @@ func NewPromptHandler(client OutgoingClient, handler PromptLinker, logger *slog.
 	}, nil
 }
 
-func (h *promptHandler) handlePutTargetLink(link provider.InterfaceLinkDefinition) error {
+func (h *promptHandler) HandlePutTargetLink(link provider.InterfaceLinkDefinition) error {
 	args := &mcp.Prompt{}
 
 	name, ok := link.TargetConfig["name"]
@@ -90,7 +90,7 @@ func (h *promptHandler) handlePutTargetLink(link provider.InterfaceLinkDefinitio
 	return nil
 }
 
-func (h *promptHandler) handleDelTargetLink(link provider.InterfaceLinkDefinition) error {
+func (h *promptHandler) HandleDelTargetLink(link provider.InterfaceLinkDefinition) error {
 	h.logger.Info("handling del link", "link", link)
 	return nil
 }

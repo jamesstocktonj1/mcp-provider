@@ -1,4 +1,4 @@
-package app
+package prompt
 
 import (
 	"github.com/jamesstocktonj1/mcp-provider/bindings/jamesstocktonj1/mcp/mcp_prompt"
