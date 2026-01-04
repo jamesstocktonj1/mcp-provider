@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/jamesstocktonj1/mcp-provider/app/prompt"
+	"github.com/jamesstocktonj1/mcp-provider/app/tool"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.wasmcloud.dev/provider"
 )
@@ -27,6 +28,7 @@ type server struct {
 
 	// wRPC handlers
 	promptHandler prompt.PromptHandler
+	toolHandler   tool.ToolHandler
 }
 
 type args struct {
@@ -57,6 +59,11 @@ func NewServer() (*server, error) {
 
 	// Create new wRPC handlers
 	s.promptHandler, err = prompt.NewPromptHandler(prov, s.mcpServer, prov.Logger)
+	if err != nil {
+		return nil, err
+	}
+
+	s.toolHandler, err = tool.NewToolHandler(prov, s.mcpServer, prov.Logger)
 	if err != nil {
 		return nil, err
 	}
